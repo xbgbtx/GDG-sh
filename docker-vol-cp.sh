@@ -13,7 +13,8 @@ target_volume=$3
 
 printf "\nCopying $local_files from $local_dir to $target_volume\n"
 
-docker run --rm -v $local_dir:/source             \
-                -v $target_volume:/dest           \
-                -w /source                        \
-                alpine cp $local_files /dest 
+docker run --rm -v $local_dir:/source                      \
+                -v $target_volume:/dest                    \
+                -w /source                                 \
+                alpine                                     \
+                /bin/ash -c "cp -r $local_files /dest"
