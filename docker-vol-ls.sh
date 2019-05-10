@@ -27,7 +27,20 @@ then
     exit 1
 fi
 
-volume=$1
+
+filter="name=^"+$1+"$"
+
+volume=$(docker volume ls -qf $filter )
+
+if [[ $volume != $1 ]]
+then
+    printf "\nVolume $1 does not exist.\n"
+    printf "\nValid volume names:\n"
+
+    docker volume ls
+
+    exit 1
+fi
 
 docker run --rm            \
            -v $volume:/vol/ \
