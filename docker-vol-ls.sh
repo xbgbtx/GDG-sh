@@ -5,14 +5,6 @@
 # image.  It then uses /bin/ash to run the 'ls' command with some options to
 # make the listing recursive and somewhat readable.
 
-#TODO
-# BUG - If a volume doesn't exist then it is created this this command.
-#     - In order to check that a volume exists use the command:
-#                    docker volume ls -q -f 'name=$name'
-#     - Note that this command returns a list of all volumes matching
-#     - a regex of the name.  May be able to use 'anchors' to avoid this
-
-
 display_usage ()
 {
     printf "\n"
@@ -27,6 +19,8 @@ then
     exit 1
 fi
 
+#docker volume ls is used with a filter to list only the volumes whose name
+#completely matches the first parameter
 
 filter="name=^"+$1+"$"
 
