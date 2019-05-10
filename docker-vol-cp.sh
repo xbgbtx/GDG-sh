@@ -13,7 +13,7 @@ display_usage ()
     printf "\n"
 }
 
-if [ $# -lt 4 ]
+if [ $# -lt 3 ]
 then
     display_usage
     exit 1
@@ -24,10 +24,15 @@ local_files=$2
 
 target_volume=$3
 
+target_dir="/dest/$4"
+
+printf "\n--> $target_dir\n"
+
 printf "\nCopying $local_files from $local_dir to $target_volume\n"
 
-docker run --rm -v $local_dir:/source                      \
-                -v $target_volume:/dest                    \
-                -w /source                                 \
-                alpine                                     \
-                /bin/ash -c "cp -r $local_files /dest"
+docker run --rm -v $local_dir:/source                                       \
+                -v $target_volume:/dest                                     \
+                -w /source                                                  \
+                alpine                                                      \
+                /bin/ash -c "mkdir -p $target_dir &&                        \
+                             cp -rf $local_files $target_dir"
