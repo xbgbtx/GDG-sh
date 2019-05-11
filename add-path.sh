@@ -20,3 +20,8 @@ then
     exit 1
 fi
 
+if [ ! -d $1 ]
+then
+    printf "\nNot a valid directory:  $1\n"
+    exit 1
+fi
