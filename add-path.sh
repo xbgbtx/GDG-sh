@@ -20,8 +20,12 @@ then
     exit 1
 fi
 
-if [ ! -d $1 ]
+new_dir=$(readlink -m $1)
+
+if [ ! -d $new_dir ]
 then
     printf "\nNot a valid directory:  $1\n"
     exit 1
 fi
+
+
