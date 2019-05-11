@@ -3,3 +3,20 @@
 #   ~/.profile
 #
 # The command checks if the directory exists before adding it.
+#
+# The command also checks that the directory isn't already on the path.
+
+
+display_usage ()
+{
+    printf "\n"
+    printf "add-path [dir]"
+    printf "\n"
+}
+
+if [ $# -lt 1 ]
+then
+    display_usage
+    exit 1
+fi
+
