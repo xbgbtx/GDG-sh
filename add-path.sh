@@ -24,8 +24,16 @@ new_dir=$(readlink -m $1)
 
 if [ ! -d $new_dir ]
 then
-    printf "\nNot a valid directory:  $1\n"
+    printf "\nNot a valid directory:  $new_dir\n"
     exit 1
 fi
 
+#TODO:  This currently returns true for incomplete matches.
+#       e.g. ~ matches any child path of the home directory
+#            paths are separated by : or the end of string ($)
+if [[ $PATH == *"$new_dir"* ]]
+then
+    printf "\nDirectory is already in PATH:  $new_dir\n"
+    exit 1
+fi
 
