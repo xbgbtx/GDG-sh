@@ -28,10 +28,13 @@ then
     exit 1
 fi
 
-#TODO:  This currently returns true for incomplete matches.
-#       e.g. ~ matches any child path of the home directory
-#            paths are separated by : or the end of string ($)
-if [[ $PATH == *"$new_dir"* ]]
+#Regex used to search path for the new_dir.  Directories on the $PATH
+#are separated by colons ( : ) so the directory will have a colon on either
+#side or be at the start or end of the string
+
+path_regex="(^|:)$new_dir($|:)"
+
+if [[ $PATH =~ $path_regex ]]
 then
     printf "\nDirectory is already in PATH:  $new_dir\n"
     exit 1
