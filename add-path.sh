@@ -6,7 +6,6 @@
 #
 # The command also checks that the directory isn't already on the path.
 
-
 display_usage ()
 {
     printf "\n"
@@ -40,3 +39,6 @@ then
     exit 1
 fi
 
+echo -e "if [ -d \"$new_dir\" ]; then" >> ~/.profile
+echo -e "   PATH=$new_dir:\$PATH" >> ~/.profile
+echo -e "fi\n" >> ~/.profile
