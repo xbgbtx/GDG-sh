@@ -2,9 +2,15 @@
 # This command adds a directory to your path by echoing a few lines to:
 #   ~/.profile
 #
+# The command will attempt to add the path to the current shell but this
+# will only work if the command is run using the 'source' command.  
+# Otherwise the path will be loaded when .profile is executed.
+#
 # The command checks if the directory exists before adding it.
 #
 # The command also checks that the directory isn't already on the path.
+
+profile=~/.profile
 
 display_usage ()
 {
@@ -39,6 +45,13 @@ then
     exit 1
 fi
 
-echo -e "if [ -d \"$new_dir\" ]; then" >> ~/.profile
-echo -e "   PATH=$new_dir:\$PATH" >> ~/.profile
-echo -e "fi\n" >> ~/.profile
+#add the PATH to profile for future sessions
+
+echo -e "if [ -d \"$new_dir\" ]; then" >> $profile
+echo -e "   PATH=\"$new_dir:\$PATH\"" >> $profile
+echo -e "fi\n" >> $profile
+
+#add the PATH for current session
+
+PATH="$new_dir:$PATH"; export PATH
+
