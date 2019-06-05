@@ -10,7 +10,8 @@
 #
 # The command also checks that the directory isn't already on the path.
 
-profile=~/.profile
+#profile=~/.profile
+profile=~/.zshrc
 
 display_usage ()
 {
@@ -47,7 +48,7 @@ fi
 
 #add the PATH to profile for future sessions
 
-echo -e "if [ -d \"$new_dir\" ]; then" >> $profile
+echo -e "\nif [ -d \"$new_dir\" ]; then" >> $profile
 echo -e "   PATH=\"$new_dir:\$PATH\"" >> $profile
 echo -e "fi\n" >> $profile
 
