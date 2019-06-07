@@ -1,6 +1,6 @@
 #Kills the most recently started docker container.
 
-containerName=docker ps -n 1
+containerName="$(docker ps -n 1)"
 
 printf "Stopping:\n$containerName\n" 
 
