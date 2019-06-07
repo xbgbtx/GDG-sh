@@ -11,3 +11,5 @@ case $input in
 docker stop $( docker ps -aqn 1 )
 ;;
 esac
+
+docker ps
