@@ -39,4 +39,4 @@ fi
 docker run --rm            \
            -v $volume:/vol/ \
            alpine          \
-           /bin/ash -c "ls -fRAhl /vol/"
+           /bin/ash -c "ls -RAhl /vol/"
