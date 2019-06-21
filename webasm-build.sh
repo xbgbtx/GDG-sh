@@ -8,7 +8,7 @@ build_path="/tmp/wasm-build"
 
 emcc="/home/boop/emsdk/fastcomp/emscripten/emcc"
 
-build_cmd="$emcc -O3 -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwra\"]'"
+build_cmd="$emcc -O3 -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\"]'"
 
 display_usage ()
 {
