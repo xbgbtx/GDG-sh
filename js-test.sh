@@ -34,21 +34,24 @@ source_path=$(readlink -m -n $1)
 source_file=$(basename $source_path)
 
 #derive the test filename from the source filename
-source_test=$(echo $source_file | sed "s/js/test.js/g")
+test_path=$(echo $source_path | sed "s/js/test.js/g")
 
-echo "$source_test"
+echo "$test_path"
 
 #create build dir 
-#ssh $build_server "mkdir -p $build_path"
+ssh $build_server "mkdir -p $build_path"
 
 #Copy test environment files
-#ssh $build_server "cp -r $test_env_files/* $build_path"
+ssh $build_server "cp -r $test_env_files/* $build_path"
 
 #copy source file to the build dir on the build server
-#scp $source_path $build_server:$build_path
+scp $source_path $build_server:$build_path
+
+#copy test file
+scp $test_path $build_server:$build_path
 
 #execute the build command
-#ssh $build_server "cd $build_path && $build_cmd $source_file"
+ssh $build_server "cd $build_path && $build_cmd"
 
 #remove the build folder on build server
-#ssh $build_server "rm -rf $build_path"
+ssh $build_server "rm -rf $build_path"
