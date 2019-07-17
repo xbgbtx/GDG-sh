@@ -34,7 +34,7 @@ source_path=$(readlink -m -n $1)
 source_file=$(basename $source_path)
 
 #derive the test filename from the source filename
-test_path=$(echo $source_path | sed "s/js/test.js/g")
+test_path=$(echo $source_path | sed "s/js$/test.js/g")
 
 echo "$test_path"
 
