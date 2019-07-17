@@ -1,5 +1,5 @@
 # Command to send a source file to the web-assembly build server,
-# and perform unit testing with 'Check'
+# and perform unit testing with 'Unity'
 
 #Username@Hostname for the server used to build webassembly
 build_server="boop@web-asm"
@@ -16,7 +16,7 @@ display_usage ()
 	printf "c-unit-test.sh [source_file]\n"
 	printf "\n"
 	printf "Sends the sourcefile to the web-asm build server \n"
-	printf "and uses Check to perform unit testing.\n"
+	printf "and uses Unity to perform unit testing.\n"
 	printf "\n"
 }
 
@@ -30,17 +30,25 @@ fi
 source_path=$(readlink -m -n $1)
 source_file=$(basename $source_path)
 
+#derive the test filename from the source filename
+test_path=$(echo $source_path | sed "s/c/test.c/g")
+
+echo "$test_path"
+
 #create build dir 
 ssh $build_server "mkdir -p $build_path"
+
+#Copy test environment files
+ssh $build_server "cp -r $test_env_files/* $build_path"
 
 #copy source file to the build dir on the build server
 scp $source_path $build_server:$build_path
 
-#execute the build command
-ssh $build_server "cd $build_path && $build_cmd $source_file"
+#copy test file
+scp $test_path $build_server:$build_path
 
-#copy the output files to current dir on local machine
-scp $build_server:$build_path/a.out.* .
+#execute the build command
+ssh $build_server "cd $build_path && $build_cmd"
 
 #remove the build folder on build server
 ssh $build_server "rm -rf $build_path"
