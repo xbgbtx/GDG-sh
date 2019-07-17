@@ -38,16 +38,18 @@ echo "$test_path"
 #create build dir 
 ssh $build_server "mkdir -p $build_path"
 
-#Copy test environment files
-ssh $build_server "cp -r $test_env_files/* $build_path"
-
 #copy source file to the build dir on the build server
 scp $source_path $build_server:$build_path
 
 #copy test file
 scp $test_path $build_server:$build_path
 
-#execute the build command
+#execute the generate test runner ruby script
+
+#build test with gcc
+
+#run test
+
 ssh $build_server "cd $build_path && $build_cmd"
 
 #remove the build folder on build server
