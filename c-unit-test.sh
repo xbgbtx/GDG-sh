@@ -38,6 +38,7 @@ source_file=$(basename $source_path)
 
 #derive the test filename from the source filename
 test_path=$(echo $source_path | sed "s/c$/test.c/g")
+test_file=$(basename $test_path)
 
 echo "$test_path"
 
@@ -61,13 +62,16 @@ scp $header_path $build_server:$build_path
 #copy unity files to the test dir
 ssh $build_server "cp $unity_path/src/unity* $build_path"
 
-#execute the generate test runner ruby script
+#generate test runner
+ssh $build_server "cd $build_path && 
+	               ruby $unity_path/auto/generate_test_runner.rb \
+                   $test_file TestRunner"
 
 #build test with gcc
+ssh $build_server "cd $build_path && gcc *.c Test"
 
 #run test
-
-#ssh $build_server "cd $build_path && $build_cmd"
+ssh $build_server "cd $build_path && ./Test"
 
 #remove the build folder on build server
-#ssh $build_server "rm -rf $build_path"
+ssh $build_server "rm -rf $build_path"
