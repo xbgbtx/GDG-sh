@@ -4,6 +4,9 @@
 #Username@Hostname for the server used to build webassembly
 build_server="boop@web-asm"
 
+#Path to find the Unity testing framework repo on build server
+unity_path="~/Unity/"
+
 #directory to perform the build on the build server
 build_path="/tmp/c-unit-test"
 
@@ -54,6 +57,9 @@ scp $test_path $build_server:$build_path
 
 #copy header file
 scp $header_path $build_server:$build_path
+
+#copy unity files to the test dir
+ssh $build_server "cp $unity_path/src/unity* $build_path"
 
 #execute the generate test runner ruby script
 
