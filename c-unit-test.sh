@@ -18,6 +18,9 @@ display_usage ()
 	printf "Sends the sourcefile to the web-asm build server \n"
 	printf "and uses Unity to perform unit testing.\n"
 	printf "\n"
+	printf "It is expected that the c file being tested will have\n"
+	printf "corresponding .h and .test.c files.\n"
+	printf "\n"
 }
 
 if [ $# -lt 1 ]
@@ -31,9 +34,14 @@ source_path=$(readlink -m -n $1)
 source_file=$(basename $source_path)
 
 #derive the test filename from the source filename
-test_path=$(echo $source_path | sed "s/c/test.c/g")
+test_path=$(echo $source_path | sed "s/c$/test.c/g")
 
 echo "$test_path"
+
+#derive the header filename from the source filename
+header_path=$(echo $source_path | sed "s/c$/h/g")
+
+echo "$header_path"
 
 #create build dir 
 ssh $build_server "mkdir -p $build_path"
@@ -44,13 +52,16 @@ scp $source_path $build_server:$build_path
 #copy test file
 scp $test_path $build_server:$build_path
 
+#copy header file
+scp $header_path $build_server:$build_path
+
 #execute the generate test runner ruby script
 
 #build test with gcc
 
 #run test
 
-ssh $build_server "cd $build_path && $build_cmd"
+#ssh $build_server "cd $build_path && $build_cmd"
 
 #remove the build folder on build server
-ssh $build_server "rm -rf $build_path"
+#ssh $build_server "rm -rf $build_path"
