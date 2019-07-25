@@ -65,7 +65,7 @@ ssh $build_server "cp $unity_path/src/unity* $build_path"
 #generate test runner
 ssh $build_server "cd $build_path && 
 	               ruby $unity_path/auto/generate_test_runner.rb \
-                   $test_file TestRunner"
+                   $test_file test-runner.c"
 
 #build test with gcc
 ssh $build_server "cd $build_path && gcc *.c -o Test"
