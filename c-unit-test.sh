@@ -68,7 +68,7 @@ ssh $build_server "cd $build_path &&
                    $test_file TestRunner"
 
 #build test with gcc
-ssh $build_server "cd $build_path && gcc *.c Test"
+ssh $build_server "cd $build_path && gcc *.c -o Test"
 
 #run test
 ssh $build_server "cd $build_path && ./Test"
