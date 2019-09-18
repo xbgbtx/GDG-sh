@@ -40,12 +40,14 @@ source_file=$(basename $source_path)
 test_path=$(echo $source_path | sed "s/c$/test.c/g")
 test_file=$(basename $test_path)
 
-echo "$test_path"
+# debug
+#echo "$test_path"
 
 #derive the header filename from the source filename
 header_path=$(echo $source_path | sed "s/c$/h/g")
 
-echo "$header_path"
+# debug
+#echo "$header_path"
 
 #create build dir 
 ssh $build_server "mkdir -p $build_path"
