@@ -29,18 +29,24 @@ then
 	exit 1
 fi
 
-#Full path and filename of the source file
-source_path=$(readlink -m -n $1)
-source_file=$(basename $source_path)
-
 #create build dir 
 ssh $build_server "mkdir -p $build_path"
 
-#copy source file to the build dir on the build server
-scp $source_path $build_server:$build_path
+#copy over all files in args
+for arg in "$@"
+do
+    echo "Copying: $arg"
+
+    #Full path and filename of the source file
+    source_path=$(readlink -m -n $arg)
+    source_file=$(basename $source_path)
+
+    #copy source file to the build dir on the build server
+    scp $source_path $build_server:$build_path
+done
 
 #execute the build command
-ssh $build_server "cd $build_path && $build_cmd $source_file"
+ssh $build_server "cd $build_path && $build_cmd *.c"
 
 #copy the output files to current dir on local machine
 scp $build_server:$build_path/a.out.* .
