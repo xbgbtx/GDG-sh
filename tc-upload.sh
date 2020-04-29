@@ -27,13 +27,20 @@ fi
 
 echo "Copying ${cp_dir}..."
 
-git_exclude="*.git"
+#Each shell script gets its own sub-shell with a cwd and dir stack
+pushd "${cp_dir}/"
+
+git_exclude="./.git"
 
 echo "Excluding ${git_exclude}"
 
 ssh $web_server "rm -rf $web_dir/*"
 
-find $cp_dir -not \( -path $git_exclude -prune \)       \
-    | sed "s|${cp_dir}/||"
-    | xargs -0 -I{} echo {}
+find . ! -path . \
+    -not \( -path $git_exclude -prune \)      \
+    -type d  -exec bash  -c "echo ssh mkdir {} $web_server:$web_dir" \; \
+    -o \
+    -type f  -exec bash  -c "echo scp {} $web_server:$web_dir" \; 
+#| sed "s|${cp_dir}/||"                                 \
 
+popd
