@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 # Command to upload a directory to webserver and exlcude git files
 
 web_server="tc@tc"
@@ -33,6 +33,7 @@ echo "Excluding ${git_exclude}"
 
 ssh $web_server "rm -rf $web_dir/*"
 
-find $cp_dir -not \( -path $git_exclude -prune \) -print0      \
-    | xargs -0 -I{} echo {} `realpath -m --relative-to=$cp_dir {}`
+find $cp_dir -not \( -path $git_exclude -prune \)       \
+    | sed "s|${cp_dir}/||"
+    | xargs -0 -I{} echo {}
 
