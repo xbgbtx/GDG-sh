@@ -41,6 +41,5 @@ find . \
     -type d  -exec ssh $web_server "cd $web_dir; mkdir {} " \; \
     -o \
     -type f  -exec bash  -c "scp {} $web_server:$web_dir{}" \; 
-#| sed "s|${cp_dir}/||"                                 \
 
 popd
