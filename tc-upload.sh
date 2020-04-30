@@ -36,11 +36,11 @@ echo "Excluding ${git_exclude}"
 
 ssh $web_server "rm -rf $web_dir/*"
 
-find . ! -path . \
+find . \
     -not \( -path $git_exclude -prune \)      \
-    -type d  -exec bash  -c "echo ssh mkdir {} $web_server:$web_dir" \; \
+    -type d  -exec ssh $web_server "cd $web_dir; mkdir {} " \; \
     -o \
-    -type f  -exec bash  -c "echo scp {} $web_server:$web_dir" \; 
+    -type f  -exec bash  -c "scp {} $web_server:$web_dir{}" \; 
 #| sed "s|${cp_dir}/||"                                 \
 
 popd
