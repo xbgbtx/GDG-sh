@@ -25,6 +25,10 @@ then
     exit 1
 fi
 
+echo "Deleting ${webserver}:${web_dir}"
+
+ssh $web_server "rm -rf $web_dir/*"
+
 echo "Copying ${cp_dir}..."
 
 #Each shell script gets its own sub-shell with a cwd and dir stack
@@ -34,7 +38,6 @@ git_exclude="./.git"
 
 echo "Excluding ${git_exclude}"
 
-ssh $web_server "rm -rf $web_dir/*"
 
 find . \
     -not \( -path $git_exclude -prune \)      \
@@ -43,3 +46,7 @@ find . \
     -type f  -exec bash  -c "scp {} $web_server:$web_dir{}" \; 
 
 popd
+
+echo "Chmod 755 ${web_dir}"
+
+ssh $web_server "sudo chmod -R 755 $web_dir"
