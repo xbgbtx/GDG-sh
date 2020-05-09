@@ -38,9 +38,13 @@ git_exclude="./.git"
 
 echo "Excluding ${git_exclude}"
 
+node_exclude="./node_modules"
+
+echo "Excluding ${node_exclude}"
 
 find . \
     -not \( -path $git_exclude -prune \)      \
+    -not \( -path $node_exclude -prune \)      \
     -type d  -exec ssh $web_server "cd $web_dir; mkdir {} " \; \
     -o \
     -type f  -exec bash  -c "scp {} $web_server:$web_dir{}" \; 
