@@ -28,8 +28,14 @@ then
    exit 1
 fi
 
-GHP_DIR="gh-pages"
+GHP_BRANCH="gh-pages"
+PROJECT_DIR=$PWD
 BUILD_DIR=$(readlink -m $1)
+WORK_TREE_DIR="/tmp/$GHP_BRANCH-$(basename $PWD)"
+
+printf "Project dir: $PROJECT_DIR\n";
+printf "Build dir: $BUILD_DIR\n";
+printf "Work tree dir: $WORK_TREE_DIR\n";
 
 if [ ! -d $BUILD_DIR ]
 then
@@ -37,45 +43,29 @@ then
    exit 1
 fi
 
-if [ -d $GHP_DIR ]
+if [ -d $WORK_TREE_DIR ]
 then
-   printf "gh-pages dir already exists.\n"
+   printf "Work tree dir already exists.\n"
    exit 1
-fi
-
-if [ ! -f ".gitignore" ]
-then
-   printf "Creating gitignore\n"
-   touch ".gitignore"
-fi
-
-if ! grep -q "^/${GHP_DIR}/" ".gitignore"
-then
-   printf "Add $GHP_DIR to .gitignore\n"
-   echo "/$GHP_DIR/" >> ".gitignore"
 fi
 
 printf "Creating worktree.\n"
 
-git worktree add -B $GHP_DIR $GHP_DIR
+git worktree add -B $GHP_BRANCH $WORK_TREE_DIR
 
 printf "Copying $BUILD_DIR to github pages.\n"
 
-cp -r $BUILD_DIR/* $GHP_DIR
-
-
-cd $GHP_DIR
-git branch --set-upstream-to=origin/$GHP_DIR $GHP_DIR
+cd $WORK_TREE_DIR
+git branch --set-upstream-to=origin/$GHP_BRANCH $GHP_BRANCH
 git fetch --all
-git reset --hard origin/$GHP_DIR
+git reset --hard origin/$GHP_BRANCH
 
 printf "Pushing build files to github"
 
-rsync -vr $BUILD_DIR . --delete
-git add -A
+rsync -vr $BUILD_DIR/ $WORK_TREE_DIR/ --delete
+git add .
 git commit -m "Copy build files to gh-pages."
 git push
 
 printf "Removing gh-pages tree.\n"
-cd ..
-git worktree remove $GHP_DIR
+git worktree remove $GHP_BRANCH
