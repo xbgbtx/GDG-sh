@@ -31,11 +31,23 @@ fi
 GHP_BRANCH="gh-pages"
 PROJECT_DIR=$PWD
 BUILD_DIR=$(readlink -m $1)
-WORK_TREE_DIR="/tmp/$GHP_BRANCH-$(basename $PWD)"
+WORK_TREE_DIR=$(readlink -m ./$GHP_BRANCH)
 
 printf "Project dir: $PROJECT_DIR\n";
 printf "Build dir: $BUILD_DIR\n";
 printf "Work tree dir: $WORK_TREE_DIR\n";
+
+if [ ! -f ".gitignore" ]
+then
+   printf "Creating gitignore\n"
+   touch ".gitignore"
+fi
+
+if ! grep -q "^/${GHP_BRANCH}/" ".gitignore"
+then
+   printf "Add $GHP_BRANCH to .gitignore\n"
+   echo "/$GHP_BRANCH/" >> ".gitignore"
+fi
 
 if [ ! -d $BUILD_DIR ]
 then
@@ -60,12 +72,13 @@ git branch --set-upstream-to=origin/$GHP_BRANCH $GHP_BRANCH
 git fetch --all
 git reset --hard origin/$GHP_BRANCH
 
-printf "Pushing build files to github"
+printf "Pushing build files to github\n"
 
-rsync -vr $BUILD_DIR/ $WORK_TREE_DIR/ --delete
+rsync -vr $BUILD_DIR/ $WORK_TREE_DIR --delete --exclude='.git*'
 git add .
 git commit -m "Copy build files to gh-pages."
 git push
 
 printf "Removing gh-pages tree.\n"
+cd $PROJECT_DIR
 git worktree remove $GHP_BRANCH
