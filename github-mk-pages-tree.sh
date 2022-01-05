@@ -1,6 +1,19 @@
 #!/bin/bash
 # Creates a worktree called gh-pages for hosting site
 
+display_usage ()
+{
+    printf "Use from inside folder to upload:\n"
+    printf "github-empty-repo"
+    printf "\n"
+}
+
+if [ ! $# -eq 0 ]
+then
+    display_usage
+    exit 1
+fi
+
 # Silent check if current dir is in a repo
 git rev-parse --is-inside-work-tree &> /dev/null
 if [ "$?" -ne 0 ]
