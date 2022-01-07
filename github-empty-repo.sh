@@ -1,5 +1,6 @@
 #!/bin/bash
 # Sends the current working directory to an empty github repo.
+# Repo must exist with the same name as this directory
 
 display_usage ()
 {
