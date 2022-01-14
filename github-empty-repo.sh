@@ -23,8 +23,10 @@ then
    exit 1
 fi
 
+#git host is defined in ssh config
+GIT_HOST="xbgbtx"
 DIR=$(basename $PWD)
-REPO_URL="git@xbgbtx.github.com:xbgbtx/$DIR.git"
+REPO_URL="git@$GIT_HOST:xbgbtx/$DIR.git"
 README="./README.md"
 
 if [ ! -f "$README" ] ; then
